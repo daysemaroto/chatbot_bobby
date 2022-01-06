@@ -24,8 +24,9 @@ from utils import *
 
 # In[15]:
 
-
-intents = json.loads(open('intents.json').read())
+with open('intents.json', encoding='utf-8') as fh:
+    intents = json.load(fh)
+#intents = json.loads(open('intents.json').read())
 words = pickle.load(open('words.pkl','rb'))
 classes = pickle.load(open('classes.pkl','rb'))
 
@@ -95,49 +96,49 @@ def chatbot_response(text):
 # In[16]:
 
 
-chatbot_response("alo")
+#chatbot_response("alo")
 
 
 # In[3]:
 
 
-chatbot_response("HOLA")
+#chatbot_response("HOLA")
 
 
 # In[10]:
 
 
-chatbot_response("adios")
+#chatbot_response("adios")
 
 
 # In[11]:
 
 
-chatbot_response("QUIERO COMER ATUN")
+#chatbot_response("QUIERO COMER ATUN")
 
 
 # In[12]:
 
 
-chatbot_response("QUIERO COMER DULCES")
+#chatbot_response("QUIERO COMER DULCES")
 
 
 # In[13]:
 
 
-chatbot_response("qué haces")
+#chatbot_response("qué haces")
 
 
 # In[14]:
 
 
-chatbot_response("QUIERO COMER")
+#chatbot_response("QUIERO COMER")
 
 
 # In[17]:
 
 
-chatbot_response("QUIERO COMER CERDO")
+#chatbot_response("QUIERO COMER CERDO")
 
 
 # In[ ]:

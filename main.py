@@ -11,7 +11,7 @@ from predictions import *
 # baseUrl= 'http://localhost:8091/lolyapi/v1/users'
 baseUrl = 'http://lolymidiapi.espol.edu.ec/api/lolyapi/v1'
 token = ''
-urlRobot= 'https://634a-200-126-19-106.ngrok.io'
+urlRobot= 'https://cc75-200-126-19-106.ngrok.io'
 
 tags = []
 eventsId = []
@@ -23,15 +23,15 @@ idEventoStop = '28'
 # engine = pyttsx3.init('sapi5')
 # engine = pyttsx3.init('dummy')
 engine = pyttsx3.init()
-engine.setProperty('voice', 'spanish-latin-am')
+# engine.setProperty('voice', 'spanish-latin-am')
+engine.setProperty('voice', 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_ES-MX_SABINA_11.0')
+
 voices = engine.getProperty('voices')
 
-for voice in voices:
-    print(voice)
+# for voice in voices:
+#     print(voice)
 
-engine.setProperty('voice', voices[1].id)
-
-
+# engine.setProperty('voice', voices[1].id)
 
 def getToken():
   try:
@@ -47,14 +47,12 @@ def getToken():
   return resp.headers.get('Authorization').split(' ')[1]
 
 
-def speak(audio):
-  print('this is the audio que speak capta:', audio)
-  audio = audio + 'palabraex'
-  # print('entre a funcion de hablar')
-  engine.say(audio)
+def speak(audioResponse, tagResponse, queryCaptado):
+  print('this is the audio que speak capta:', audioResponse)
+  if (tagResponse == 'alimentos_sanos' or tagResponse == 'alimentos_no_sanos'):
+    audioResponse = queryCaptado + audioResponse
+  engine.say(audioResponse)
   engine.runAndWait()
-  # engine.stop()
-  print('voy a detener el robot')
   stopMovementRobot()
 
   # speech.say(audio, 'es_ES')
@@ -126,6 +124,6 @@ if __name__ == '__main__':
     result, tag = chatbot_response(query)
     idEvent = searchIdEventOfBiblioteca(tag)
     startMovementRobot(idEvent)
-    speak(result)
+    speak(result, tag, query)
 
 

@@ -1,0 +1,33 @@
+{"intents": [
+        {"tag": "saludo",
+         "patterns": ["Hola", "Hey", "Cómo estás?","Buenos días","Buenas tardes", "Buenas noches", "Qué tal?"],
+         "responses": ["Hola, gusto en saludarte soy BOBBY", "Buen día, en qué puedo ayudarte? Soy BOBBY"],
+         "context": [""]
+        },
+        {"tag": "despedida",
+         "patterns": ["chao", "nos vemos", "adiós", "hasta luego", "gusto en conocerte"],
+         "responses": ["Nos vemos", "Hasta la próxima", "Que tengas un buen día"],
+         "context": [""]
+        },
+        {"tag": "sin respuesta",
+         "patterns": [],
+         "responses": ["Lo siento no te entiendo, recuerda mencionar un solo alimento para asesorarte"],
+         "context": [""]
+        },
+        {"tag": "opciones",
+         "patterns": ["Qué puedes hacer?", "Cómo me puedes ayudar?", "Para qué sirves?", "Qué haces?"],
+         "responses": ["Puedo ayudarte a verificar si una alimento es sano o no"],
+         "context": [""]
+        },
+        {"tag": "alimentos_sanos",
+         "patterns": ["lacteos", "proteinas", "frutas", "vegetales", "carbohidratos", "frutoseco"],
+         "responses": ["El alimento mencionado es un alimento sano, te ayudará a ser un niño saludable"],
+         "context": [""]
+        },
+        {"tag": "alimentos_no_sanos",
+         "patterns": ["snacks", "chatarra", "procesados", "dulces"],
+         "responses": ["Estás mencionando un alimento poco saludable, no deberías comer mucho de eso"],
+         "context": [""]
+        }
+   ]
+}

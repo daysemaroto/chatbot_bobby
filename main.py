@@ -114,8 +114,8 @@ if __name__ == '__main__':
   clear = lambda: os.system('cls')
   while True:
     query = takeCommand().lower()
-    if query == "hola "+robotName:
-      result, tag, pattern = chatbot_response(query)
+    result, tag, pattern = chatbot_response(query)
+    if(tag=='saludo' ):
       idEvent = searchIdEventOfBiblioteca(tag)
       startMovementRobot(idEvent)
       speak(result, tag, pattern)

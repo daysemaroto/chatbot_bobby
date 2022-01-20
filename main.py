@@ -1,45 +1,38 @@
 import os
-
 import speech_recognition as sr
 import pyttsx3
 import requests
 import csv
-# import speech
-
 from predictions import *
+from dotenv import load_dotenv, find_dotenv
 
-# baseUrl= 'http://localhost:8091/lolyapi/v1/users'
-baseUrl = 'http://lolymidiapi.espol.edu.ec/api/lolyapi/v1'
+load_dotenv(find_dotenv())
+
+baseUrl = os.getenv('BASE_URL')
 token = ''
-urlRobot= 'https://cc75-200-126-19-106.ngrok.io'
+urlRobot = os.getenv('URL_ROBOT')
+pathBiblioteca = os.getenv('PATH_BIBLIOTECA')
+robotName = os.getenv('ROBOT_NAME')
+idEventoStop = os.getenv('ID_EVENT_STOP')
+
+voz = os.getenv('VOZ_OS')
+username = os.getenv('USERNAME_PROYECT')
+password = os.getenv('PASSWORD_PROYECT')
+
+engine = pyttsx3.init()
+engine.setProperty('voice', voz)
+# engine.setProperty('voice', voices[1].id)
 
 tags = []
 eventsId = []
-pathBiblioteca = './biblioteca.csv'
-
-robotName = 'BOBBY'
-idEventoStop = '28'
-
-# engine = pyttsx3.init('sapi5')
-# engine = pyttsx3.init('dummy')
-engine = pyttsx3.init()
-# engine.setProperty('voice', 'spanish-latin-am')
-engine.setProperty('voice', 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_ES-MX_SABINA_11.0')
-
-voices = engine.getProperty('voices')
-
-# for voice in voices:
-#     print(voice)
-
-# engine.setProperty('voice', voices[1].id)
 
 def getToken():
   try:
     url = baseUrl + '/auth/login'
     resp = requests.post(url,
                          json={
-                           "username": "dmaroto",
-                           "password": "ingles+4"
+                           "username": username,
+                           "password": password
                          })
   except:
     print("Something went wrong")
@@ -47,15 +40,13 @@ def getToken():
   return resp.headers.get('Authorization').split(' ')[1]
 
 
-def speak(audioResponse, tagResponse, queryCaptado):
-  print('this is the audio que speak capta:', audioResponse)
+def speak(audioResponse, tagResponse, patternCaptado):
   if (tagResponse == 'alimentos_sanos' or tagResponse == 'alimentos_no_sanos'):
-    audioResponse = queryCaptado + audioResponse
+    audioResponse = 'Pertenece a la categoria de '+ patternCaptado +'. '+ audioResponse
+  print("esta es la respuesta: ", audioResponse)
   engine.say(audioResponse)
   engine.runAndWait()
   stopMovementRobot()
-
-  # speech.say(audio, 'es_ES')
 
 def takeCommand():
   # transform the audio of the microphone to text (recognize voice)
@@ -121,9 +112,9 @@ if __name__ == '__main__':
   clear = lambda: os.system('cls')
   while True:
     query = takeCommand().lower()
-    result, tag = chatbot_response(query)
+    result, tag, pattern = chatbot_response(query)
     idEvent = searchIdEventOfBiblioteca(tag)
     startMovementRobot(idEvent)
-    speak(result, tag, query)
+    speak(result, tag, pattern)
 
 

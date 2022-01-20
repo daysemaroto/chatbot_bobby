@@ -43,21 +43,23 @@ classes
 def bow(sentence, words, show_details=True):
     # tokenize the pattern
     sentence_words = tokenize(final_sentence(sentence))
-    print(sentence_words)
+    #print(sentence_words)
     # bag of words - matrix of N words, vocabulary matrix
-    bag = [0]*len(words) 
+    bag = [0]*len(words)
+    pattern=''
     for s in sentence_words:
         for i,w in enumerate(words):
-            if w == s: 
+            if w == s:
+                pattern = w
                 # assign 1 if current word is in the vocabulary position
                 bag[i] = 1
                 if show_details:
                     print(f'found in bag: {w}')
-    print(np.array(bag))
-    return(np.array(bag))
+    #print(np.array(bag))
+    return(np.array(bag), pattern)
 def predict_class(sentence, model):
     # filter out predictions below a threshold
-    p = bow(sentence, words)
+    p, pattern = bow(sentence, words)
     return_list = []
     if np.any(p):
         res = model.predict(np.array([p]))[0]
@@ -69,8 +71,8 @@ def predict_class(sentence, model):
             return_list.append({"intent": classes[r[0]], "probability": str(r[1])})
     else:
         return_list.append({"intent": 'sin respuesta', "probability": '90.0'})
-    print(return_list)
-    return return_list
+    #print(return_list)
+    return return_list, pattern
 
 
 # In[11]:
@@ -85,12 +87,11 @@ def getResponse(ints, intents_json):
             break
     return result,tag
 def chatbot_response(text):
-    print("este es el texto que se ingreso:", text)
-    ints = predict_class(text.lower(), model)
+    ints, pattern = predict_class(text.lower(), model)
     result,tag = getResponse(ints, intents)
-    print("esta es la respuesta: ", result)
+    # print("esta es la respuesta: ", result)
     print('este es el tag: ', tag)
-    return result,tag
+    return result,tag, pattern
 
 
 # In[16]:

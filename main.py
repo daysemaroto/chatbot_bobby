@@ -1,4 +1,6 @@
 import os
+import sys
+
 import speech_recognition as sr
 import pyttsx3
 import requests
@@ -42,7 +44,7 @@ def getToken():
 
 def speak(audioResponse, tagResponse, patternCaptado):
   if (tagResponse == 'alimentos_sanos' or tagResponse == 'alimentos_no_sanos'):
-    audioResponse = 'Pertenece a la categoria de '+ patternCaptado +'. '+ audioResponse
+    audioResponse = 'pertenece a la categoria de '+ patternCaptado +'. '+ audioResponse
   print("esta es la respuesta: ", audioResponse)
   engine.say(audioResponse)
   engine.runAndWait()
@@ -65,7 +67,7 @@ def takeCommand():
     except sr.RequestError as e:
       print("No se pudieron solicitar los resultados del servicio de reconocimiento de voz de Google; {0}".format(e))
       return "None"
-    return query
+    return query.lower()
 
 def startMovementRobot(idEvento):
   try:
@@ -74,7 +76,7 @@ def startMovementRobot(idEvento):
                          json={
                            "urlRobot": urlRobot,
                          }, headers={'Authorization': 'Bearer ' + token})
-    print('response: ', resp)
+    print('response start movement: ', resp)
   except:
     print("Something went wrong startMovementRobot with the event: " + idEvento)
 
@@ -112,9 +114,22 @@ if __name__ == '__main__':
   clear = lambda: os.system('cls')
   while True:
     query = takeCommand().lower()
-    result, tag, pattern = chatbot_response(query)
-    idEvent = searchIdEventOfBiblioteca(tag)
-    startMovementRobot(idEvent)
-    speak(result, tag, pattern)
+    if query == "hola "+robotName:
+      result, tag, pattern = chatbot_response(query)
+      idEvent = searchIdEventOfBiblioteca(tag)
+      startMovementRobot(idEvent)
+      speak(result, tag, pattern)
+      while True:
+        query = takeCommand().lower()
+        result, tag, pattern = chatbot_response(query)
+        if(tag=='despedida' ):
+          idEvent = searchIdEventOfBiblioteca(tag)
+          startMovementRobot(idEvent)
+          speak(result, tag, pattern)
+          sys.exit(0)
+        else:
+          idEvent = searchIdEventOfBiblioteca(tag)
+          startMovementRobot(idEvent)
+          speak(result, tag, pattern)
 
 
